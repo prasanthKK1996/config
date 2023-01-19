@@ -172,8 +172,8 @@ final class ConfigConcatenation extends AbstractConfigValue implements Unmergeab
         } else if (consolidated.size() == 1) {
             return consolidated.get(0);
         } else {
-            ConfigOrigin mergedOrigin = SimpleConfigOrigin.mergeOrigins(consolidated);
-            return new ConfigConcatenation(mergedOrigin, consolidated);
+            //ConfigOrigin mergedOrigin = SimpleConfigOrigin.mergeOrigins(consolidated);
+            return new ConfigConcatenation(null, consolidated);
         }
     }
 

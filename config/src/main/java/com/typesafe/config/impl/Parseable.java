@@ -166,11 +166,11 @@ public abstract class Parseable implements ConfigParseable {
         ConfigParseOptions options = fixupOptions(baseOptions);
 
         // passed-in options can override origin
-        ConfigOrigin origin;
-        if (options.getOriginDescription() != null)
-            origin = SimpleConfigOrigin.newSimple(options.getOriginDescription());
-        else
-            origin = initialOrigin;
+        ConfigOrigin origin =null;
+//        if (options.getOriginDescription() != null)
+//            origin = SimpleConfigOrigin.newSimple(options.getOriginDescription());
+//        else
+//            origin = initialOrigin;
         return parseValue(origin, options);
     }
 

@@ -198,7 +198,7 @@ final class ConfigDocumentParser {
         }
 
         private ConfigException parseError(String message, Throwable cause) {
-            return new ConfigException.Parse(baseOrigin.withLineNumber(lineNumber), message, cause);
+            return new ConfigException.Parse(null, message, cause);
         }
 
         private String addQuoteSuggestion(String badToken, String message) {
@@ -262,7 +262,7 @@ final class ConfigDocumentParser {
             if (flavor == ConfigSyntax.JSON) {
                 if (Tokens.isValueWithType(token, ConfigValueType.STRING)) {
                     return PathParser.parsePathNodeExpression(Collections.singletonList(token).iterator(),
-                                                              baseOrigin.withLineNumber(lineNumber));
+                                                              null);
                 } else {
                     throw parseError("Expecting close brace } or a field name here, got "
                             + token);
@@ -281,7 +281,7 @@ final class ConfigDocumentParser {
 
                 putBack(t); // put back the token we ended with
                 return PathParser.parsePathNodeExpression(expression.iterator(),
-                                                          baseOrigin.withLineNumber(lineNumber));
+                                                          null);
             }
         }
 

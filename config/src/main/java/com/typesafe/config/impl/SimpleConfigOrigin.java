@@ -227,6 +227,9 @@ final class SimpleConfigOrigin implements ConfigOrigin {
     static final String MERGE_OF_PREFIX = "merge of ";
 
     private static SimpleConfigOrigin mergeTwo(SimpleConfigOrigin a, SimpleConfigOrigin b) {
+        if(a== null && b==null){
+            return null;
+        }
         String mergedDesc;
         int mergedStartLine;
         int mergedEndLine;

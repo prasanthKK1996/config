@@ -111,10 +111,10 @@ final class Tokenizer {
                     Token t;
                     if (lastTokenWasSimpleValue) {
                         t = Tokens.newUnquotedText(
-                            lineOrigin(baseOrigin, lineNumber),
+                            null,
                             whitespace.toString());
                     } else {
-                        t = Tokens.newIgnoredWhitespace(lineOrigin(baseOrigin, lineNumber),
+                        t = Tokens.newIgnoredWhitespace(null,
                                                         whitespace.toString());
                     }
                     whitespace.setLength(0); // reset
@@ -124,22 +124,22 @@ final class Tokenizer {
             }
         }
 
-        final private SimpleConfigOrigin origin;
+        //final private SimpleConfigOrigin origin;
         final private Reader input;
         final private LinkedList<Integer> buffer;
         private int lineNumber;
-        private ConfigOrigin lineOrigin;
+        //private ConfigOrigin lineOrigin;
         final private Queue<Token> tokens;
         final private WhitespaceSaver whitespaceSaver;
         final private boolean allowComments;
 
         TokenIterator(ConfigOrigin origin, Reader input, boolean allowComments) {
-            this.origin = (SimpleConfigOrigin) origin;
+            //this.origin = null;
             this.input = input;
             this.allowComments = allowComments;
             this.buffer = new LinkedList<Integer>();
             lineNumber = 1;
-            lineOrigin = this.origin.withLineNumber(lineNumber);
+            //lineOrigin = null;
             tokens = new LinkedList<Token>();
             tokens.add(Tokens.START);
             whitespaceSaver = new WhitespaceSaver();
@@ -155,7 +155,7 @@ final class Tokenizer {
                 try {
                     return input.read();
                 } catch (IOException e) {
-                    throw new ConfigException.IO(origin, "read error: "
+                    throw new ConfigException.IO(null, "read error: "
                             + e.getMessage(), e);
                 }
             } else {
@@ -236,12 +236,12 @@ final class Tokenizer {
         }
 
         private ProblemException problem(String what, String message, Throwable cause) {
-            return problem(lineOrigin, what, message, cause);
+            return problem(null, what, message, cause);
         }
 
         private ProblemException problem(String what, String message, boolean suggestQuotes,
                 Throwable cause) {
-            return problem(lineOrigin, what, message, suggestQuotes, cause);
+            return problem(null, what, message, suggestQuotes, cause);
         }
 
         private static ProblemException problem(ConfigOrigin origin, String what,
@@ -285,9 +285,9 @@ final class Tokenizer {
                 if (c == -1 || c == '\n') {
                     putBack(c);
                     if (doubleSlash)
-                        return Tokens.newCommentDoubleSlash(lineOrigin, sb.toString());
+                        return Tokens.newCommentDoubleSlash(null, sb.toString());
                     else
-                        return Tokens.newCommentHash(lineOrigin, sb.toString());
+                        return Tokens.newCommentHash(null, sb.toString());
                 } else {
                     sb.appendCodePoint(c);
                 }
@@ -306,7 +306,7 @@ final class Tokenizer {
         // that parses as JSON is treated the JSON way and otherwise
         // we assume it's a string and let the parser sort it out.
         private Token pullUnquotedText() {
-            ConfigOrigin origin = lineOrigin;
+            //ConfigOrigin origin = lineOrigin;
             StringBuilder sb = new StringBuilder();
             int c = nextCharRaw();
             while (true) {
@@ -328,13 +328,13 @@ final class Tokenizer {
                 if (sb.length() == 4) {
                     String s = sb.toString();
                     if (s.equals("true"))
-                        return Tokens.newBoolean(origin, true);
+                        return Tokens.newBoolean(null, true);
                     else if (s.equals("null"))
-                        return Tokens.newNull(origin);
+                        return Tokens.newNull(null);
                 } else if (sb.length() == 5) {
                     String s = sb.toString();
                     if (s.equals("false"))
-                        return Tokens.newBoolean(origin, false);
+                        return Tokens.newBoolean(null, false);
                 }
 
                 c = nextCharRaw();
@@ -344,7 +344,7 @@ final class Tokenizer {
             putBack(c);
 
             String s = sb.toString();
-            return Tokens.newUnquotedText(origin, s);
+            return Tokens.newUnquotedText(null, s);
         }
 
         private Token pullNumber(int firstChar) throws ProblemException {
@@ -365,10 +365,10 @@ final class Tokenizer {
             try {
                 if (containedDecimalOrE) {
                     // force floating point representation
-                    return Tokens.newDouble(lineOrigin, Double.parseDouble(s), s);
+                    return Tokens.newDouble(null, Double.parseDouble(s), s);
                 } else {
                     // this should throw if the integer is too large for Long
-                    return Tokens.newLong(lineOrigin, Long.parseLong(s), s);
+                    return Tokens.newLong(null, Long.parseLong(s), s);
                 }
             } catch (NumberFormatException e) {
                 // not a number after all, see if it's an unquoted string.
@@ -379,7 +379,7 @@ final class Tokenizer {
                 }
                 // no evil chars so we just decide this was a string and
                 // not a number.
-                return Tokens.newUnquotedText(lineOrigin, s);
+                return Tokens.newUnquotedText(null, s);
             }
         }
 
@@ -468,7 +468,7 @@ final class Tokenizer {
                     else if (c == '\n') {
                         // keep the line number accurate
                         lineNumber += 1;
-                        lineOrigin = origin.withLineNumber(lineNumber);
+                        //lineOrigin = origin.withLineNumber(lineNumber);
                     }
                 }
 
@@ -518,7 +518,7 @@ final class Tokenizer {
                 }
 
             }
-            return Tokens.newString(lineOrigin, sb.toString(), sbOrig.toString());
+            return Tokens.newString(null, sb.toString(), sbOrig.toString());
         }
 
         private Token pullPlusEquals() throws ProblemException {
@@ -533,7 +533,7 @@ final class Tokenizer {
 
         private Token pullSubstitution() throws ProblemException {
             // the initial '$' has already been consumed
-            ConfigOrigin origin = lineOrigin;
+            ConfigOrigin origin = null;
             int c = nextCharRaw();
             if (c != '{') {
                 throw problem(asString(c), "'$' not followed by {, '" + asString(c)
@@ -581,9 +581,9 @@ final class Tokenizer {
                 return Tokens.END;
             } else if (c == '\n') {
                 // newline tokens have the just-ended line number
-                Token line = Tokens.newLine(lineOrigin);
+                Token line = Tokens.newLine(null);
                 lineNumber += 1;
-                lineOrigin = origin.withLineNumber(lineNumber);
+                //lineOrigin = origin.withLineNumber(lineNumber);
                 return line;
             } else {
                 Token t;
@@ -658,7 +658,7 @@ final class Tokenizer {
 
         private void queueNextToken() throws ProblemException {
             Token t = pullNextToken(whitespaceSaver);
-            Token whitespace = whitespaceSaver.check(t, origin, lineNumber);
+            Token whitespace = whitespaceSaver.check(t, null, lineNumber);
             if (whitespace != null)
                 tokens.add(whitespace);
 

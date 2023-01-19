@@ -23,7 +23,7 @@ import com.typesafe.config.ConfigValue;
  * improperly-factored and non-modular code. Please don't add parent().
  *
  */
-abstract class AbstractConfigValue implements ConfigValue, MergeableValue {
+public abstract class AbstractConfigValue implements ConfigValue, MergeableValue {
 
     final private SimpleConfigOrigin origin;
 

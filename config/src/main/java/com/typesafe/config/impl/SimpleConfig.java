@@ -1191,4 +1191,5 @@ final class SimpleConfig implements Config, MergeableValue, Serializable {
     private Object writeReplace() throws ObjectStreamException {
         return new SerializedConfigValue(this);
     }
+
 }

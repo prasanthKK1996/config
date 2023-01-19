@@ -3,6 +3,8 @@
  */
 package com.typesafe.config;
 
+import com.typesafe.config.impl.AbstractConfigValue;
+
 import java.util.Map;
 
 /**
@@ -132,4 +134,5 @@ public interface ConfigObject extends ConfigValue, Map<String, ConfigValue> {
 
     @Override
     ConfigObject withOrigin(ConfigOrigin origin);
+
 }

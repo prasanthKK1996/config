@@ -402,8 +402,8 @@ class SerializedConfigValue extends AbstractConfigValue implements Externalizabl
                     throw new IOException("No value data found in serialization of value");
                 return value;
             } else if (code == SerializedField.VALUE_DATA) {
-                if (origin == null)
-                    throw new IOException("Origin must be stored before value data");
+//                if (origin == null)
+//                    throw new IOException("Origin must be stored before value data");
                 in.readInt(); // discard length
                 value = readValueData(in, origin);
             } else if (code == SerializedField.VALUE_ORIGIN) {

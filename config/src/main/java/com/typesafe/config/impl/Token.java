@@ -43,9 +43,9 @@ class Token {
     final ConfigOrigin origin() {
         // code is only supposed to call origin() on token types that are
         // expected to have an origin.
-        if (origin == null)
-            throw new ConfigException.BugOrBroken(
-                    "tried to get origin from token that doesn't have one: " + this);
+//        if (origin == null)
+//            throw new ConfigException.BugOrBroken(
+//                    "tried to get origin from token that doesn't have one: " + this);
         return origin;
     }
 

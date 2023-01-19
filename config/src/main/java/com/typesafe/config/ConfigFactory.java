@@ -793,6 +793,9 @@ public final class ConfigFactory {
         return Parseable.newFile(file, options).parse().toConfig();
     }
 
+    public static ConfigObject parseFile(File file,boolean flag) {
+        return Parseable.newFile(file, ConfigParseOptions.defaults()).parse();
+    }
     /**
      * Parses a file into a Config instance as with
      * {@link #parseFile(File,ConfigParseOptions)} but always uses the

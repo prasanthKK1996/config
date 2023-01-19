@@ -204,9 +204,9 @@ public class ConfigImpl {
 
     static AbstractConfigValue fromAnyRef(Object object, ConfigOrigin origin,
             FromMapMode mapMode) {
-        if (origin == null)
-            throw new ConfigException.BugOrBroken(
-                    "origin not supposed to be null");
+//        if (origin == null)
+//            throw new ConfigException.BugOrBroken(
+//                    "origin not supposed to be null");
 
         if (object == null) {
             if (origin != defaultValueOrigin)

@@ -23,7 +23,7 @@ import com.typesafe.config.ConfigOrigin;
 import com.typesafe.config.ConfigRenderOptions;
 import com.typesafe.config.ConfigValue;
 
-final class SimpleConfigObject extends AbstractConfigObject implements Serializable {
+public final class SimpleConfigObject extends AbstractConfigObject implements Serializable {
 
     private static final long serialVersionUID = 2L;
 
@@ -667,5 +667,9 @@ final class SimpleConfigObject extends AbstractConfigObject implements Serializa
     // serialization all goes through SerializedConfigValue
     private Object writeReplace() throws ObjectStreamException {
         return new SerializedConfigValue(this);
+    }
+
+    public Map<String, AbstractConfigValue> getValue(){
+        return value;
     }
 }
